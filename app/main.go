@@ -31,33 +31,20 @@ func main() {
 	// Swagger UI
 	e.GET("/swagger/*", swagger.WrapHandler)
 
-	// Websocket
+	// Websocket lissten
 	e.GET("/ws/:userName", func(c echo.Context) error {
 		return websocket.ServeWs(hub, c)
 	})
 
-	log.Print("server has started")
-
-	//start the db
+	// DB Migration
 	pgdb, err := postgres.MigrateDB()
 	if err != nil {
 		log.Printf("error: %v", err)
 		panic("error starting the database")
 	}
 
-	//get the router of the API by passing the db
+	// Attach Handler
 	api.HandlerMapping(e, pgdb)
-	// router := api.HandlerMapping(v1, db)
-
-	// //get the port from the environment variable
-	// port := os.Getenv("PORT")
-
-	// //pass the router and start listening with the server
-	// err = http.ListenAndServe(fmt.Sprintf(":%s", port), router)
-	// if err != nil {
-	// 	log.Printf("error from router %v\n", err)
-	// 	return
-	// }
 
 	e.Logger.Fatal(e.Start(*address))
 
