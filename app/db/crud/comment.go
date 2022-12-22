@@ -11,9 +11,7 @@ func CreateComment(db *pg.DB, req *models.Comment) (*models.Comment, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	comment := &models.Comment{}
-
 	err = db.Model(comment).
 		Relation("User").
 		Where("comment.id = ?", req.ID).
