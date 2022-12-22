@@ -16,13 +16,12 @@ import (
 var sql embed.FS
 
 func MigrateDB() (*pg.DB, error) {
+
 	var (
 		opts *pg.Options
 		err  error
 	)
 
-	//check if we are in prod
-	//then use the db url from the env
 	if os.Getenv("ENV") == "PROD" {
 		opts, err = pg.ParseURL(os.Getenv("DATABASE_URL"))
 		if err != nil {
@@ -37,16 +36,13 @@ func MigrateDB() (*pg.DB, error) {
 		}
 	}
 
-	//connect db
 	pgdb := pg.Connect(opts)
-	//run migrations
 	collection := migrations.NewCollection()
 	err = collection.DiscoverSQLMigrationsFromFilesystem(http.FS(sql), "migrations")
 	if err != nil {
 		return nil, err
 	}
 
-	//start the migrations
 	_, _, err = collection.Run(pgdb, "init")
 	if err != nil {
 		return nil, err
@@ -56,12 +52,13 @@ func MigrateDB() (*pg.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if newVersion != oldVersion {
 		log.Printf("migrated from version %d to %d\n", oldVersion, newVersion)
 	} else {
 		log.Printf("version is %d\n", oldVersion)
 	}
 
-	//return the db connection
 	return pgdb, err
+
 }

@@ -38,8 +38,11 @@ func HandlerMapping(e *echo.Echo, pgdb *pg.DB) {
 	comment := v1.Group("/comment")
 	{
 		{
-			comment.GET(":commentID", h.GetComments)
-			comment.GET("", h.GetComments)
+			comment.POST("/", h.CreateComment)
+			comment.GET("/", h.GetComments)
+			comment.GET("/{commentID}", h.GetCommentByID)
+			comment.PUT("/{commentID}", h.UpdateCommentByID)
+			comment.DELETE("/{commentID}", h.DeleteCommentByID)
 		}
 	}
 }
