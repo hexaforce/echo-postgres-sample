@@ -1,9 +1,9 @@
 package handler
 
 import (
-	schemas "echo-postgres-sample/api/schemas"
-	models "echo-postgres-sample/db"
-	crud "echo-postgres-sample/db/crud"
+	schemas "echo-postgres-sample/app/api/schemas"
+	models "echo-postgres-sample/app/db"
+	crud "echo-postgres-sample/app/db/crud"
 
 	"net/http"
 	"strconv"

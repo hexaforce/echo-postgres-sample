@@ -1,7 +1,7 @@
 package api
 
 import (
-	"echo-postgres-sample/api/handler"
+	"echo-postgres-sample/app/api/handler"
 
 	"github.com/go-pg/pg/v10"
 	"github.com/labstack/echo/v4"

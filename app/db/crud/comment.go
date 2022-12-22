@@ -1,7 +1,7 @@
 package crud
 
 import (
-	models "echo-postgres-sample/db"
+	models "echo-postgres-sample/app/db"
 
 	"github.com/go-pg/pg/v10"
 )
