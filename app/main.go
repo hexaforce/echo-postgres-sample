@@ -2,12 +2,9 @@ package main
 
 import (
 	"echo-postgres-sample/app/api"
-	"echo-postgres-sample/app/db"
+	postgres "echo-postgres-sample/app/db"
 	"flag"
-	"fmt"
 	"log"
-	"net/http"
-	"os"
 
 	websocket "echo-postgres-sample/app/websocket"
 
@@ -16,6 +13,8 @@ import (
 
 	swagger "github.com/swaggo/echo-swagger"
 )
+
+var addr = flag.String("addr", ":1323", "http service address")
 
 func main() {
 	flag.Parse()
@@ -39,23 +38,26 @@ func main() {
 	log.Print("server has started")
 
 	//start the db
-	pgdb, err := db.StartDB()
+	db, err := postgres.MigrateDB()
 	if err != nil {
 		log.Printf("error: %v", err)
 		panic("error starting the database")
 	}
 
 	//get the router of the API by passing the db
-	router := api.StartAPI(pgdb)
+	api.HandlerMapping(e, db)
+	// router := api.HandlerMapping(v1, db)
 
-	//get the port from the environment variable
-	port := os.Getenv("PORT")
+	// //get the port from the environment variable
+	// port := os.Getenv("PORT")
 
-	//pass the router and start listening with the server
-	err = http.ListenAndServe(fmt.Sprintf(":%s", port), router)
-	if err != nil {
-		log.Printf("error from router %v\n", err)
-		return
-	}
+	// //pass the router and start listening with the server
+	// err = http.ListenAndServe(fmt.Sprintf(":%s", port), router)
+	// if err != nil {
+	// 	log.Printf("error from router %v\n", err)
+	// 	return
+	// }
+
+	e.Logger.Fatal(e.Start(*addr))
 
 }

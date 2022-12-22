@@ -13,7 +13,7 @@ import (
 //go:embed migrations/*.sql
 var sql embed.FS
 
-func StartDB() (*pg.DB, error) {
+func MigrateDB() (*pg.DB, error) {
 	var (
 		opts *pg.Options
 		err  error
