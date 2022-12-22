@@ -1,7 +1,7 @@
 package schemas
 
 import (
-	models "echo-postgres-sample/app/db"
+	models "echo-postgres-sample/db"
 )
 
 // -- Requests and Responses

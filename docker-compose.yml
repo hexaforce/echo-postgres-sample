@@ -9,6 +9,7 @@ services:
       - backend_api_net
     ports:
       - "1323:1323"
+    restart: on-failure:10
     env_file:
       - ./local.env
       - ./postgres/local.env

@@ -30,8 +30,6 @@ func MigrateDB() (*pg.DB, error) {
 		}
 	} else {
 		opts = &pg.Options{
-			//default port
-			//depends on the db service from docker compose
 			Addr:     fmt.Sprintf("%s:%s", os.Getenv("POSTGRES_SERVER"), os.Getenv("POSTGRES_PORT")),
 			User:     os.Getenv("POSTGRES_USER"),
 			Password: os.Getenv("POSTGRES_PASSWORD"),

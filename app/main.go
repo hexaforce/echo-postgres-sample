@@ -1,12 +1,13 @@
 package main
 
 import (
-	"echo-postgres-sample/app/api"
-	postgres "echo-postgres-sample/app/db"
+	"echo-postgres-sample/api"
+	postgres "echo-postgres-sample/db"
 	"flag"
 	"log"
 
-	websocket "echo-postgres-sample/app/websocket"
+	_ "echo-postgres-sample/docs"
+	websocket "echo-postgres-sample/websocket"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
