@@ -14,7 +14,7 @@ import (
 	swagger "github.com/swaggo/echo-swagger"
 )
 
-var addr = flag.String("addr", ":1323", "http service address")
+var address = flag.String("address", ":1323", "http service address")
 
 func main() {
 	flag.Parse()
@@ -38,14 +38,14 @@ func main() {
 	log.Print("server has started")
 
 	//start the db
-	db, err := postgres.MigrateDB()
+	pgdb, err := postgres.MigrateDB()
 	if err != nil {
 		log.Printf("error: %v", err)
 		panic("error starting the database")
 	}
 
 	//get the router of the API by passing the db
-	api.HandlerMapping(e, db)
+	api.HandlerMapping(e, pgdb)
 	// router := api.HandlerMapping(v1, db)
 
 	// //get the port from the environment variable
@@ -58,6 +58,6 @@ func main() {
 	// 	return
 	// }
 
-	e.Logger.Fatal(e.Start(*addr))
+	e.Logger.Fatal(e.Start(*address))
 
 }
