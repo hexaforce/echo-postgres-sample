@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"fmt"
+
 	"github.com/go-pg/migrations/v8"
 	"github.com/go-pg/pg/v10"
 )
@@ -30,14 +32,15 @@ func MigrateDB() (*pg.DB, error) {
 		opts = &pg.Options{
 			//default port
 			//depends on the db service from docker compose
-			Addr:     "db:5432",
-			User:     "postgres",
-			Password: "password",
+			Addr:     fmt.Sprintf("%s:%s", os.Getenv("POSTGRES_SERVER"), os.Getenv("POSTGRES_PORT")),
+			User:     os.Getenv("POSTGRES_USER"),
+			Password: os.Getenv("POSTGRES_PASSWORD"),
+			Database: os.Getenv("POSTGRES_DB"),
 		}
 	}
 
 	//connect db
-	db := pg.Connect(opts)
+	pgdb := pg.Connect(opts)
 	//run migrations
 	collection := migrations.NewCollection()
 	err = collection.DiscoverSQLMigrationsFromFilesystem(http.FS(sql), "migrations")
@@ -46,12 +49,12 @@ func MigrateDB() (*pg.DB, error) {
 	}
 
 	//start the migrations
-	_, _, err = collection.Run(db, "init")
+	_, _, err = collection.Run(pgdb, "init")
 	if err != nil {
 		return nil, err
 	}
 
-	oldVersion, newVersion, err := collection.Run(db, "up")
+	oldVersion, newVersion, err := collection.Run(pgdb, "up")
 	if err != nil {
 		return nil, err
 	}
@@ -62,5 +65,5 @@ func MigrateDB() (*pg.DB, error) {
 	}
 
 	//return the db connection
-	return db, err
+	return pgdb, err
 }
