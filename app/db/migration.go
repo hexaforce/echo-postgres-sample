@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"fmt"
 
@@ -36,6 +37,7 @@ func MigrateDB() (*pg.DB, error) {
 		}
 	}
 
+	time.Sleep(3 * time.Second)
 	pgdb := pg.Connect(opts)
 	collection := migrations.NewCollection()
 	err = collection.DiscoverSQLMigrationsFromFilesystem(http.FS(sql), "migrations")
@@ -56,7 +58,7 @@ func MigrateDB() (*pg.DB, error) {
 	if newVersion != oldVersion {
 		log.Printf("migrated from version %d to %d\n", oldVersion, newVersion)
 	} else {
-		log.Printf("version is %d\n", oldVersion)
+		log.Printf("migrate version is %d\n", oldVersion)
 	}
 
 	return pgdb, err

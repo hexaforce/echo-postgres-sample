@@ -40,7 +40,7 @@ func main() {
 	pgdb, err := postgres.MigrateDB()
 	if err != nil {
 		log.Printf("error: %v", err)
-		panic("error starting the database")
+		panic("Unable to connect to database. Try again. . .")
 	}
 
 	// Attach Handler

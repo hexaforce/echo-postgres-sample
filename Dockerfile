@@ -1,5 +1,8 @@
 FROM golang:alpine AS build
 
+RUN apk add git gcc tzdata ca-certificates
+RUN go install github.com/swaggo/swag/cmd/swag@latest
+
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 ENV GOOS=linux
@@ -11,11 +14,9 @@ COPY ./go.mod .
 COPY ./go.sum .
 
 WORKDIR /go/src/app 
-RUN go install github.com/swaggo/swag/cmd/swag@latest
 RUN swag init
 
 WORKDIR /go/src
-RUN apk add git gcc tzdata ca-certificates
 RUN go build -a -installsuffix cgo -o app app/main.go 
 
 FROM scratch
